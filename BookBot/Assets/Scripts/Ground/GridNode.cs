@@ -2,7 +2,7 @@ using UnityEngine;
 
 public class GridNode 
 {
-
+    public GridNode parentNode;
     public Vector3 worldposition;
 
     public int gridX;
@@ -18,8 +18,7 @@ public class GridNode
     {
         get{ return generalCost + heuristicCost;}
     }
-    GridNode parentNode;
-
+    
 
     // _ stands for temporaty assignment
     public GridNode(bool _isWalkable, Vector3 _worldPos, int _gridX, int _gridY)
