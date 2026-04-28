@@ -25,14 +25,16 @@ public class FloorGrid : MonoBehaviour
         int y = Mathf.RoundToInt(positionInWorld.z);  //IMPORTANT Y&Z switch
 
 
-        Debug.Log("Tchecking if node is on grid");
-        if(x >= 0 && x<15 && y>= 0 && y<25)
+        Debug.Log("checking if node is on grid");
+        if(x >= 0 && x<gridSizeX && y>= 0 && y<gridSizeY)
         {
             return gridNodes[x,y];
         }
-
-        Debug.Log("This Node is outside of the map");
+        else
+        {
+        Debug.Log($"This Node is outside of the map at World Position: {positionInWorld}");
         return null;
+        }
     }
 
     public List<GridNode> NeighborNodes(GridNode node)
@@ -60,7 +62,7 @@ public class FloorGrid : MonoBehaviour
                 int checkY = node.gridY + y;
 
                 //for the walls, that there is no error outside walls
-                if(0<= checkX && checkX <15 && 0<= checkY && checkY <25)
+                if(0<= checkX && checkX <gridSizeX && 0<= checkY && checkY <gridSizeY)
                 {
 
                     neighbor.Add(gridNodes[checkX,checkY]);

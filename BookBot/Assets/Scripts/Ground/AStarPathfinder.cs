@@ -15,16 +15,8 @@ public class AStarPathfinder : MonoBehaviour
     List<GridNode> closedList = new List<GridNode>();
 
 
-    public Transform seeker;
-    public Transform target;
-
-    public RobotController robot;
-
-
-    void Start()
-    {
-        StartCoroutine(FindPath(seeker.position, target.position));
-    }
+   
+    public RobotManager managerOfRobot;
 
 
     public IEnumerator FindPath (Vector3 startPos, Vector3 targetPos)
@@ -33,6 +25,11 @@ public class AStarPathfinder : MonoBehaviour
         GridNode startNode = floorGrid.NodeFromWorldPoint(startPos); 
         GridNode targetNode =   floorGrid.NodeFromWorldPoint(targetPos); 
 
+        if(startNode == null || targetNode == null)
+        {
+            Debug.Log("Cannot caluclate path");
+            yield break;
+        }
         //making sure nothing previous is in there
         openList.Clear();
         closedList.Clear();
@@ -124,7 +121,7 @@ public class AStarPathfinder : MonoBehaviour
         }
         pathToStart.Reverse();
         floorGrid.finalPath = pathToStart;
-        robot.SetPath(pathToStart);
+        managerOfRobot.BookMustBeDelivered(pathToStart);
 
     }
 }

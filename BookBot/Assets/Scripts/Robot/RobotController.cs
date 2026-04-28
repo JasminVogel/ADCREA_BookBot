@@ -8,21 +8,32 @@ public class RobotController : MonoBehaviour
 {
    public List<GridNode> currentPath = new List<GridNode>(); 
    public AStarPathfinder aStar;
+
+   private BaseState activeState;
    public float speed = 3f;
-   int nextTargetIndex = 0;
+   public int nextTargetIndex = 0;
 
-    
+    public void Start()
+    {
+        SwitchState(new IdleState(this));
+    }
+    public void SwitchState(BaseState newState)
+    {
+        if(activeState != null)
+        {
+            activeState.Exit();
+        }
 
+        activeState = newState;
+        activeState.Enter();
+    }
     void Update()
     {
-        
-        
-        if(currentPath != null && nextTargetIndex < currentPath.Count)
+        if(activeState != null)
         {
-            GridNode nextTarget = currentPath[nextTargetIndex];
-            MoveToTarget(nextTarget);
+            activeState.Update();
         }
-       
+        
     }
     public void MoveToTarget(GridNode nextTarget)
     {
@@ -34,12 +45,4 @@ public class RobotController : MonoBehaviour
           nextTargetIndex ++; 
         }
     }
-
-    public void SetPath(List<GridNode> path)
-    {
-        currentPath = path;
-        nextTargetIndex = 0;
-        
-    }
-
 }
