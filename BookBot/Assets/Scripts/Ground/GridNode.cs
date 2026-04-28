@@ -16,7 +16,9 @@ public class GridNode
 
     public int finalCost
     {
-        get{ return generalCost + heuristicCost;}
+
+        // remove heuristicCost then it is djistra
+        get{ return generalCost;}// + heuristicCost;}
     }
     
 
