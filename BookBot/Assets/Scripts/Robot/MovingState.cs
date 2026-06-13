@@ -23,7 +23,18 @@ public class MovingState :  BaseState
         }
         else
         {
-            robot.SwitchState(new IdleState(robot));
+            Book heldBook = robot.GetComponentInChildren<Book>();
+            
+            if (heldBook == null)
+            {
+                // We arrived at the messy pile empty-handed! Pick up a book!
+                robot.SwitchState(new PickingState(robot));
+            }
+            else
+            {
+                // We arrived at the shelf holding a book! (We will write DroppingState later)
+                robot.SwitchState(new DroppingState(robot)); 
+            }
         }
     }
     public override void Exit()

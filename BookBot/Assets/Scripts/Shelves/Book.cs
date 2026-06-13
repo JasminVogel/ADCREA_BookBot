@@ -2,7 +2,9 @@ using UnityEngine;
 
 public class Book : MonoBehaviour
 {
+    public Shelf myShelf;
     public Color myColor; 
+    public bool isSorted = true;
 
     public float Hue {get; private set;}
     public float Saturation {get; private set;}

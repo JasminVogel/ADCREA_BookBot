@@ -18,7 +18,7 @@ public class GridNode
     {
 
         // remove heuristicCost then it is djistra
-        get{ return generalCost;}// + heuristicCost;}
+        get{ return generalCost + heuristicCost;}
     }
     
 
