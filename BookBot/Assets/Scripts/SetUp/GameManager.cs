@@ -5,22 +5,43 @@ public class GameManager : MonoBehaviour
 {
 
     public Shelf[] allShelves;
-
     public Transform dropZone;
-    public int booksToScatter = 10;
+
 
     public float bookThickness = 0.2f;
 
     public Stack<Book> pileOfBooks = new Stack<Book>();
-    void Update()
+  
+
+    public void StartSimulation()
     {
-        // Press G to Generate Chaos!
-        if (Input.GetKeyDown(KeyCode.G))
-        {
-            GenerateChaos();
-        }
+        BuildDatabase();
+        GenerateChaos();
     }
 
+    private void BuildDatabase()
+    {
+        BarcodeDatabase db = GetComponent<BarcodeDatabase>();
+        
+        // Loop through every shelf in the warehouse
+        foreach (Shelf shelf in allShelves)
+        {
+            // Loop through all the perfectly sorted books before the chaos starts
+            for (int i = 0; i < shelf.myBooks.Count; i++)
+            {
+                Book book = shelf.myBooks[i];
+                
+                // 1. Generate a random 5-digit UPC barcode
+                int randomUPC = Random.Range(10000, 99999);
+                book.barcodeID = randomUPC;
+                
+                // 2. Insert the barcode and its physical location into the BST!
+                db.Insert(randomUPC, shelf, i);
+            }
+        }
+        
+        Debug.Log("Boss: Successfully built the Binary Search Tree Database!");
+    }
     public void GenerateChaos()
     {
         pileOfBooks.Clear();
@@ -36,8 +57,7 @@ public class GameManager : MonoBehaviour
             return;
         }
 
-      
-        int scatterCount = Mathf.Min(booksToScatter, allAvailableBooks.Count);
+        int scatterCount = Mathf.Min(SimulationSettings.booksToGenerate, allAvailableBooks.Count);
         
         for (int i = 0; i < scatterCount; i++)
         {
@@ -92,6 +112,12 @@ public class GameManager : MonoBehaviour
         }
 
         Debug.Log($"Chaos generated! Scattered {scatterCount} books into the pile.");
+        RobotController robot = GameObject.FindFirstObjectByType<RobotController>();
+        if (robot != null)
+        {
+            Debug.Log("Boss: Wake up Robot, there is a new mess to clean!");
+            robot.SwitchState(new IdleState(robot));
+        }
     }
 
 }

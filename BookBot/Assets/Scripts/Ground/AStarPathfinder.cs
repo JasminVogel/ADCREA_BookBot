@@ -74,7 +74,14 @@ public class AStarPathfinder : MonoBehaviour
                 if(newCostToNeighbor < neighbor.generalCost || !openList.Contains(neighbor))
                 {
                     neighbor.generalCost = newCostToNeighbor;
-                    neighbor.heuristicCost = GetDistance(neighbor, targetNode);
+                    if (SimulationSettings.useDijkstra)
+                    {  
+                        neighbor.heuristicCost = 0; 
+                    }
+                    else
+                    {
+                        neighbor.heuristicCost = GetDistance(neighbor, targetNode);
+                    } 
                     neighbor.parentNode = currentNode;
                     
                     //no final cost analysis needed cuz already done in the GridNode.cs

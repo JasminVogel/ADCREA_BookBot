@@ -52,6 +52,7 @@ public class Shelf : MonoBehaviour
             bookScript.InitializeBook(exactShade);
 
             bookScript.myShelf = this;
+         
             myBooks.Add(bookScript);
         }
     }
@@ -154,7 +155,7 @@ public class Shelf : MonoBehaviour
         }
 
         
-        int slotIndex = myBooks.Count - 1;
+       int slotIndex = exactSlot;
 
         
         Vector3 localSlotPos = startOffset + new Vector3(slotIndex * spacing, 0, 0);

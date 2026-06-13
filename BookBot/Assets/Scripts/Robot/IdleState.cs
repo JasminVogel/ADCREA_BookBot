@@ -4,7 +4,7 @@ public class IdleState : BaseState
 {
 
     private float scanTimer = 0f;
-    private float scanInterval = 1f;
+    private float scanInterval = 0.1f;
     private bool isWaitingForBoss = false;
 
     public IdleState(RobotController _robot)

@@ -33,14 +33,24 @@ public class PickingState : BaseState
 
             Debug.Log($"Successfully POPPED {topBook.name} off the Stack!");
 
-            robot.currentTargetSlot = robot.ScanForCorrectSlot(topBook.myShelf, topBook.myColor);
-            Debug.Log($"Robot Scanner: This book belongs in Slot {robot.currentTargetSlot}!");
-            robot.aStar.managerOfRobot.RequestPathToShelf(topBook.myShelf);
-        }
-        else
-        {
-            Debug.Log("The pile is completely empty! Going back to rest.");
-            robot.SwitchState(new IdleState(robot));
+            int scannedUPC = topBook.barcodeID;
+            
+            // 2. Query the Boss's Database!
+            BarcodeDatabase db = GameObject.FindFirstObjectByType<BarcodeDatabase>();
+            BinarySearchTreeNode databaseResult = db.Search(scannedUPC);
+
+            if (databaseResult != null)
+            {
+                Debug.Log($"BST Match! Barcode {scannedUPC} belongs to {databaseResult.targetShelf.name}, Slot {databaseResult.targetSlot}");
+                
+                // 3. Set the target and ask for the route
+                robot.currentTargetSlot = databaseResult.targetSlot;
+                robot.aStar.managerOfRobot.RequestPathToShelf(databaseResult.targetShelf);
+            }
+            else
+            {
+                robot.SwitchState(new FinishedState(robot));
+            }
         }
     }
 
