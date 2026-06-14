@@ -1,9 +1,10 @@
 using UnityEngine;
-
+using System.Collections.Generic;
 public class BarcodeDatabase : MonoBehaviour
 {
    private BinarySearchTreeNode root;
 
+    public List<Transform> lastSearchPath = new List<Transform>();
    
     public void Insert(int id, Shelf shelf, int slot)
     {
@@ -30,16 +31,20 @@ public class BarcodeDatabase : MonoBehaviour
   
     public BinarySearchTreeNode Search(int id)
     {
+        lastSearchPath.Clear();
         return SearchRec(root, id);
     }
 
     private BinarySearchTreeNode SearchRec(BinarySearchTreeNode root, int id)
     {
-     
+     if (root != null && root.targetShelf != null)
+        {
+            lastSearchPath.Add(root.targetShelf.transform);
+        }
+
         if (root == null || root.barcode == id)
             return root;
 
-        
         if (root.barcode > id)
             return SearchRec(root.left, id);
 
