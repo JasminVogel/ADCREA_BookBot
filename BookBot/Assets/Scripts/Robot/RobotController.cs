@@ -95,11 +95,9 @@ public class RobotController : MonoBehaviour
         int bestSlot = 0;
         float smallestDifference = float.MaxValue;
 
-        // 1. Read the raw HSV (Fulfills your Rubric Requirement!)
+       
         Color.RGBToHSV(bookColor, out float targetH, out float targetS, out float targetV);
 
-        // 2. Map the Target HSV onto a 3D Cartesian Cylinder
-        // X and Y handle the circular Hue and Saturation, Z handles the Value (Darkness)
         float targetAngle = targetH * Mathf.PI * 2f;
         Vector3 targetPoint = new Vector3(
             targetS * Mathf.Cos(targetAngle), 
@@ -122,8 +120,6 @@ public class RobotController : MonoBehaviour
                 idealV
             );
 
-            // 3. Compare the true physical 3D distance between the colors!
-            // This completely destroys the Hue Wrap-Around and Gray-Hue bugs.
             float difference = Vector3.Distance(targetPoint, idealPoint);
 
             if (difference < smallestDifference)

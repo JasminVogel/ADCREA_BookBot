@@ -48,7 +48,7 @@ public class BarcodeDatabase : MonoBehaviour
         if (root.barcode > id)
             return SearchRec(root.left, id);
 
-        // Key is smaller than root's key
+     
         return SearchRec(root.right, id);
     }
 }

@@ -19,7 +19,7 @@ public class Shelf : MonoBehaviour
     public void GenerateBooks()
     {
         myBooks.RemoveAll(book => book == null);
-        // Safety check to prevent spawning thousands of books if you click it twice
+        
         if (myBooks.Count > 0)
         {
             Debug.LogWarning("Books are already generated on this shelf!");

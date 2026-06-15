@@ -1,9 +1,9 @@
 public class BinarySearchTreeNode 
 {
 
-    public int barcode;       // The Key
-    public Shelf targetShelf; // The Value
-    public int targetSlot;    // The Value
+    public int barcode;     
+    public Shelf targetShelf; 
+    public int targetSlot;    
     public BinarySearchTreeNode left;
     public BinarySearchTreeNode right;
 

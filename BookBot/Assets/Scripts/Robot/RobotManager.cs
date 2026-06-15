@@ -33,7 +33,7 @@ public class RobotManager : MonoBehaviour
 
     public void RequestPathToShelf(Shelf targetShelf)
     {
-        // Lightning-fast Dictionary lookup!
+        
         if (deliveryZoneCache.TryGetValue(targetShelf, out Vector3 zonePos))
         {
             Debug.Log($"Boss: Calculating A* route to the {targetShelf.name}...");
@@ -41,16 +41,7 @@ public class RobotManager : MonoBehaviour
         }
     }
 
-    /*
-    public void Update()
-    {
-        if(Input.GetKeyDown(KeyCode.Space))
-        {
-            Debug.Log("Boss: Caluclating route to target...");
-            pathfinder.StartCoroutine(pathfinder.FindPath(robot.transform.position, testTarget.position));
-        }
-    }
-    */
+   
     public void BookMustBeDelivered(List<GridNode> path)
     {
         robot.SwitchState(new MovingState(robot, path));

@@ -47,22 +47,22 @@ public class ObstaclePlacer : MonoBehaviour
 
     private void TryRemoveSignAtNode(GridNode node)
     {
-        // Instead of asking Unity physics to find the sign, we just check our memory!
+       
         if (activeSigns.ContainsKey(node))
         {
-            // 1. Destroy the physical 3D sign
+        
             Destroy(activeSigns[node]); 
             
-            // 2. Remove it from our memory bank
+      
             activeSigns.Remove(node);   
             
-            // 3. Unlock the tile for the robot!
+       
             node.isWalkable = true;     
             Debug.Log("Sign removed via Dictionary bypass! Tile is unlocked.");
         }
         else
         {
-            // If the player clicks an unwalkable tile (like a permanent shelf), do nothing!
+      
             Debug.Log("Clicked an unwalkable tile, but no Wet Floor Sign is registered here.");
         }
     }
@@ -73,11 +73,10 @@ public class ObstaclePlacer : MonoBehaviour
 
         Vector3 spawnPos = node.worldposition + (Vector3.up * 0.5f);
 
-        // Spawn the sign and save a reference to it
+       
         GameObject newSign = Instantiate(wetFloorSignPrefab, spawnPos, Quaternion.identity);
         
-        // --- ADD TO MEMORY ---
-        // Lock it into our Dictionary so we can find it instantly later
+    
         activeSigns.Add(node, newSign);
         
         node.isWalkable = false;
