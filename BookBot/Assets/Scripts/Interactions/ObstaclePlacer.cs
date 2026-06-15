@@ -26,8 +26,8 @@ public class ObstaclePlacer : MonoBehaviour
         if (grid == null || robotManager == null) return;
 
         Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-
-        if (Physics.Raycast(ray, out RaycastHit hit, 1000f, floorLayer))
+        RaycastHit hit;
+        if (Physics.Raycast(ray, out hit, 1000f, floorLayer))
         {
             GridNode clickedNode = grid.NodeFromWorldPoint(hit.point);
 
@@ -58,12 +58,12 @@ public class ObstaclePlacer : MonoBehaviour
             
        
             node.isWalkable = true;     
-            Debug.Log("Sign removed via Dictionary bypass! Tile is unlocked.");
+            Debug.Log(" varible removed tile  ");
         }
         else
         {
       
-            Debug.Log("Clicked an unwalkable tile, but no Wet Floor Sign is registered here.");
+            Debug.Log("This is an unwalkable tile");
         }
     }
 
@@ -71,7 +71,7 @@ public class ObstaclePlacer : MonoBehaviour
     {
         if (IsForbiddenZone(node)) return; 
 
-        Vector3 spawnPos = node.worldposition + (Vector3.up * 0.5f);
+        Vector3 spawnPos = node.worldPosition + (Vector3.up * 0.5f);
 
        
         GameObject newSign = Instantiate(wetFloorSignPrefab, spawnPos, Quaternion.identity);
@@ -80,14 +80,14 @@ public class ObstaclePlacer : MonoBehaviour
         activeSigns.Add(node, newSign);
         
         node.isWalkable = false;
-        Debug.Log("Sign placed and registered in Dictionary!");
+        Debug.Log(" sign deplyed also registred");
     }
 
     private bool IsForbiddenZone(GridNode node)
     {
-        foreach (Vector3 zonePos in robotManager.deliveryZoneCache.Values)
+        foreach (Vector3 zonePos in robotManager.shelfDeliveryZone.Values)
         {
-            if (Vector3.Distance(node.worldposition, zonePos) < 0.1f)
+            if (Vector3.Distance(node.worldPosition, zonePos) < 0.1f)
             {
                 return true; 
             }

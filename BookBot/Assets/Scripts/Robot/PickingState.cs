@@ -2,21 +2,20 @@ using UnityEngine;
 
 public class PickingState : BaseState
 {
-    public PickingState(RobotController _robot)
+    private BinarySearchTreeNode foundBookData;
+    public PickingState(RobotController robot)
     {
-        this.robot = _robot;
+        this.robot = robot;
     }
 
     public override void Enter()
     {
-        Debug.Log("Robot reached the target! Entering Picking State...");
+        Debug.Log("Robot reached the target => Picking State...");
 
-        GameManager gm = GameObject.FindFirstObjectByType<GameManager>();
 
-        if (gm != null && gm.pileOfBooks.Count > 0)
+        if(robot.gameManager != null && robot.gameManager.pileOfBooks.Count > 0)
         {
-            
-            Book topBook = gm.pileOfBooks.Pop();
+            Book topBook = robot.gameManager.pileOfBooks.Pop();
 
            
             Rigidbody rb = topBook.GetComponent<Rigidbody>();
@@ -34,31 +33,26 @@ public class PickingState : BaseState
             Debug.Log($"Successfully POPPED {topBook.name} off the Stack!");
 
             int scannedUPC = topBook.barcodeID;
-            
-          
-            BarcodeDatabase db = GameObject.FindFirstObjectByType<BarcodeDatabase>();
-            BinarySearchTreeNode databaseResult = db.Search(scannedUPC);
+
+            BinarySearchTreeNode databaseResult = robot.database.Search(scannedUPC);
+
 
             if (databaseResult != null)
             {
-                Debug.Log($"BST Match! Barcode {scannedUPC} belongs to {databaseResult.targetShelf.name}, Slot {databaseResult.targetSlot}");
+                Debug.Log("BST Match! Barcode " + scannedUPC + " belongs to " + databaseResult.targetShelf.name + ", Slot " + databaseResult.targetSlot);
                 
-                BSTVisualizer visualizer = GameObject.FindFirstObjectByType<BSTVisualizer>();
-
-                if (visualizer != null && db.lastSearchPath.Count > 0)
+                if (robot.visualizer != null && robot.database.lastSearchPath.Count > 0)
                 {
                     Debug.Log("Playing BST Hologram Animation!");
                     
-                    visualizer.PlayHologramAnimation(robot.transform.position, db.lastSearchPath, () => 
-                    {
-                       
-                        robot.currentTargetSlot = databaseResult.targetSlot;
-                        robot.aStar.managerOfRobot.RequestPathToShelf(databaseResult.targetShelf);
-                    });
+                    
+                    foundBookData = databaseResult;
+
+                    
+                    robot.visualizer.PlayHologramAnimation(robot.transform.position, robot.database.lastSearchPath, OnHologramFinished);
                 }
                 else
                 {
-                   
                     Debug.LogWarning("[PICKING STATE] Visualizer skipped. Walking normally.");
                     robot.currentTargetSlot = databaseResult.targetSlot;
                     robot.aStar.managerOfRobot.RequestPathToShelf(databaseResult.targetShelf);
@@ -69,6 +63,13 @@ public class PickingState : BaseState
                 robot.SwitchState(new FinishedState(robot));
             }
         }
+    
+    }
+
+    private void OnHologramFinished()
+    {
+        robot.currentTargetSlot = foundBookData.targetSlot;
+        robot.aStar.managerOfRobot.RequestPathToShelf(foundBookData.targetShelf);
     }
 
     public override void Update()

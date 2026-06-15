@@ -1,22 +1,19 @@
 using UnityEngine;
 using System.Collections.Generic;
 using System.Collections;
-using UnityEditor.TerrainTools;
-using UnityEditor.Experimental.GraphView;
-using Unity.VisualScripting;
-using System.IO;
 
 public class AStarPathfinder : MonoBehaviour
 {
-    [SerializeField] float waitingTime = 0.25f;
+    //technically dijkstra as finalCost calculation is not in here
+    
+    [SerializeField] private float waitingTime = 0.25f;
     public FloorGrid floorGrid;
     public LineRenderer pathLine;
     public RobotManager managerOfRobot;
-
     public GameObject searchTilePrefab;
-    private List<GameObject> activeSearchTiles = new List<GameObject>();
 
-   
+
+    private List<GameObject> activeSearchTiles = new List<GameObject>();
     List<GridNode> openList = new List<GridNode>();
     List<GridNode> closedList = new List<GridNode>();
 
@@ -74,7 +71,7 @@ public class AStarPathfinder : MonoBehaviour
             if (searchTilePrefab != null)
             {
           
-            GameObject newTile = Instantiate(searchTilePrefab, currentNode.worldposition + (Vector3.up * 0.05f), Quaternion.Euler(90f, 0f, 0f));
+            GameObject newTile = Instantiate(searchTilePrefab, currentNode.worldPosition + (Vector3.up * 0.05f), Quaternion.Euler(90f, 0f, 0f));
             activeSearchTiles.Add(newTile);
             }
 
@@ -168,6 +165,7 @@ public class AStarPathfinder : MonoBehaviour
         }
         pathToStart.Reverse();
         floorGrid.finalPath = pathToStart;
+
         // Visualisation for game window
         if (pathLine != null)
         {
@@ -175,7 +173,7 @@ public class AStarPathfinder : MonoBehaviour
             for (int i = 0; i < pathToStart.Count; i++)
             {
                 
-                pathLine.SetPosition(i, pathToStart[i].worldposition + (Vector3.up * 0.2f));
+                pathLine.SetPosition(i, pathToStart[i].worldPosition + (Vector3.up * 0.2f));
             }
         }
         managerOfRobot.BookMustBeDelivered(pathToStart);

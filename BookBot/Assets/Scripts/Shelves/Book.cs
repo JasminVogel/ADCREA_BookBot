@@ -7,9 +7,9 @@ public class Book : MonoBehaviour
     public bool isSorted = true;
     public int barcodeID;
 
-    public float Hue {get; private set;}
-    public float Saturation {get; private set;}
-    public float Value {get; private set;}
+    public float hue {get; private set;}
+    public float saturation {get; private set;}
+    public float value {get; private set;}
 
 
     //used in .....
@@ -22,13 +22,19 @@ public class Book : MonoBehaviour
         {
             renderer.material.color = myColor;
         }
+        else
+        {
+        Debug.LogWarning("this book as no renderer");    
+        }
+        
 
         //for better performance, doing math here
+        //HSV better for color search
         Color.RGBToHSV(myColor, out float H, out float S, out float V);
 
-        Hue = H;
-        Saturation = S;
-        Value = V;
+        hue = H;
+        saturation = S;
+        value = V;
     }
 }
 

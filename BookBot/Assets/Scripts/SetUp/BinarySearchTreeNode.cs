@@ -1,17 +1,17 @@
 public class BinarySearchTreeNode 
 {
 
-    public int barcode;     
+    public int barcode;   //to better sort books almost like remember slot number  
     public Shelf targetShelf; 
     public int targetSlot;    
     public BinarySearchTreeNode left;
     public BinarySearchTreeNode right;
 
-    public BinarySearchTreeNode(int id, Shelf shelf, int slot)
+    public BinarySearchTreeNode(int barcode, Shelf targetShelf, int targetSlot)
     {
-        barcode = id;
-        targetShelf = shelf;
-        targetSlot = slot;
+        this.barcode = barcode;
+        this.targetShelf = targetShelf;
+        this.targetSlot = targetSlot;
         left = null;
         right = null;
     }

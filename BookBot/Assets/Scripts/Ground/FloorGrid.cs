@@ -6,8 +6,8 @@ using UnityEngine;
 public class FloorGrid : MonoBehaviour
 {
     //if size of ground would be scaled, change here
-    public int gridSizeX = 25;
-    public int gridSizeY = 15;
+    [SerializeField] private int gridSizeX = 25;
+    [SerializeField] private int gridSizeY = 15;
     GridNode[,] gridNodes;
 
 
@@ -21,8 +21,10 @@ public class FloorGrid : MonoBehaviour
 
     public GridNode NodeFromWorldPoint(Vector3 positionInWorld)
     {
+
+        //rounding for Arrays (because of mouse clicks)
         int x = Mathf.RoundToInt(positionInWorld.x);
-        int y = Mathf.RoundToInt(positionInWorld.z);  //IMPORTANT Y&Z switch
+        int y = Mathf.RoundToInt(positionInWorld.z);  
 
 
         
@@ -32,21 +34,18 @@ public class FloorGrid : MonoBehaviour
         }
         else
         {
-        Debug.Log($"This Node is outside of the map at World Position: {positionInWorld}");
-        return null;
+            return null;
         }
     }
 
     public List<GridNode> NeighborNodes(GridNode node)
     {
-        //new list for finding connected nodes (since not really a tree, this is how we do it, 3x3 field)
+        
         List<GridNode> neighbor = new List<GridNode>();
         if (gridNodes == null) 
         { 
             return neighbor;
         }
-        int actualGridWidth = gridNodes.GetLength(0);
-        int actualGridHeight = gridNodes.GetLength(1);
 
         for(int x = -1; x <= 1; x ++)
         {
@@ -57,7 +56,7 @@ public class FloorGrid : MonoBehaviour
                     continue;
                 }    
 
-                 //Because of movement restrictions (diagonally)
+               
                 if(Mathf.Abs(x) == 1 && Mathf.Abs(y) == 1)
                 {
                 
@@ -67,11 +66,14 @@ public class FloorGrid : MonoBehaviour
                 int checkX = node.gridX + x;
                 int checkY = node.gridY + y;
 
-                //for the walls, that there is no error outside walls
-                if(0<= checkX && checkX <gridSizeX && 0<= checkY && checkY <gridSizeY)
+                
+                if(0<= checkX && checkX <gridSizeX)
                 {
-
-                    neighbor.Add(gridNodes[checkX,checkY]);
+                    if(0<= checkY && checkY <gridSizeY)
+                    {
+                        neighbor.Add(gridNodes[checkX,checkY]);
+                    }
+                    
                 }
 
                
@@ -90,7 +92,16 @@ public class FloorGrid : MonoBehaviour
         {
             foreach(GridNode node in gridNodes)
             {
-                Gizmos.color = node.isWalkable ? Color.white : Color.red;
+                if(node.isWalkable == true)
+                {
+                    Gizmos.color = Color.white;
+                }
+                else
+                {
+                    Gizmos.color = Color.red;
+                }
+               
+
                 if(checkedNodes != null && checkedNodes.Contains(node))
                 {
                     Gizmos.color = Color.cornflowerBlue;
@@ -101,7 +112,7 @@ public class FloorGrid : MonoBehaviour
                     Gizmos.color = Color.black;
 
                 }
-                Gizmos.DrawCube(node.worldposition, new Vector3(0.95f, 0.1f, 0.95f));
+                Gizmos.DrawCube(node.worldPosition, new Vector3(0.95f, 0.1f, 0.95f));
             }
         }
     }
@@ -115,11 +126,19 @@ public class FloorGrid : MonoBehaviour
             {
                 Vector3 worldPoint = new Vector3(x,0,y);
 
+                bool hitObstacle = Physics.CheckSphere(worldPoint, 0.4f, obstacleMask);
+                bool isWalkable;
+                if(hitObstacle == true)
+                {
+                    isWalkable = false;
+                }
+                else
+                {
+                    isWalkable = true;
+                }
 
-                bool walkable = !Physics.CheckSphere(worldPoint, 0.4f, obstacleMask);
 
-
-                gridNodes[x,y] = new GridNode(walkable,worldPoint,x,y);
+                gridNodes[x,y] = new GridNode(isWalkable,worldPoint,x,y);
             }
         }
 

@@ -21,9 +21,13 @@ public class BarcodeDatabase : MonoBehaviour
 
        
         if (id < root.barcode)
+        {
             root.left = InsertRec(root.left, id, shelf, slot);
+        }
         else if (id > root.barcode)
+        {
             root.right = InsertRec(root.right, id, shelf, slot);
+        }
 
         return root;
     }
@@ -37,17 +41,22 @@ public class BarcodeDatabase : MonoBehaviour
 
     private BinarySearchTreeNode SearchRec(BinarySearchTreeNode root, int id)
     {
-     if (root != null && root.targetShelf != null)
+        if (root != null && root.targetShelf != null)
         {
             lastSearchPath.Add(root.targetShelf.transform);
         }
 
+
         if (root == null || root.barcode == id)
+        {
             return root;
+        }
+            
 
         if (root.barcode > id)
+        {
             return SearchRec(root.left, id);
-
+        }
      
         return SearchRec(root.right, id);
     }

@@ -2,8 +2,10 @@ using UnityEngine;
 
 public class GridNode 
 {
+
+    //public because of A* 
     public GridNode parentNode;
-    public Vector3 worldposition;
+    public Vector3 worldPosition;
 
     public int gridX;
     public int gridY;
@@ -22,12 +24,12 @@ public class GridNode
     }
     
 
-    // _ stands for temporaty assignment
-    public GridNode(bool _isWalkable, Vector3 _worldPos, int _gridX, int _gridY)
+   //Infos for later visualization and positions 
+    public GridNode(bool isWalkable, Vector3 worldPosition, int gridX, int gridY)
     {
-        isWalkable = _isWalkable;
-        worldposition = _worldPos;
-        gridX = _gridX;
-        gridY = _gridY;
+        this.isWalkable = isWalkable;
+        this.worldPosition = worldPosition;
+        this.gridX = gridX;
+        this.gridY = gridY;
     }
 }

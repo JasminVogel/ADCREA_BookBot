@@ -12,7 +12,7 @@ public class MenuManager : MonoBehaviour
     public TextMeshProUGUI speedText;
 
     public TMP_Dropdown algorithmDropdown;
-    public Button startButton;
+   
 
 
     public GameManager gameManager;
@@ -23,16 +23,16 @@ public class MenuManager : MonoBehaviour
      
         bookCountSlider.value = SimulationSettings.booksToGenerate;
         speedSlider.value = SimulationSettings.robotSpeed;
-        algorithmDropdown.value = SimulationSettings.useDijkstra ? 1 : 0;
-
+        if (SimulationSettings.useDijkstra == true)
+        {
+            algorithmDropdown.value = 1;
+        }
+        else
+        {
+            algorithmDropdown.value = 0;
+        }   
         UpdateTextDisplays();
 
-        bookCountSlider.onValueChanged.AddListener(delegate { UpdateSettings(); });
-        speedSlider.onValueChanged.AddListener(delegate { UpdateSettings(); });
-        algorithmDropdown.onValueChanged.AddListener(delegate { UpdateSettings(); });
-
-
-        startButton.onClick.AddListener(StartSimulation);
     }
 
     public void UpdateSettings()
@@ -40,15 +40,15 @@ public class MenuManager : MonoBehaviour
         SimulationSettings.booksToGenerate = (int)bookCountSlider.value;
         SimulationSettings.robotSpeed = speedSlider.value;
         
-        SimulationSettings.useDijkstra = (algorithmDropdown.value == 1);
+        SimulationSettings.useDijkstra = algorithmDropdown.value == 1;
         UpdateTextDisplays();
     }
 
     private void UpdateTextDisplays()
     {
         
-        bookCountText.text = $"Books to Sort: {SimulationSettings.booksToGenerate}";
-        speedText.text = $"Robot Speed: {SimulationSettings.robotSpeed:F1}";
+        bookCountText.text = "Books to Sort" + SimulationSettings.booksToGenerate;
+        speedText.text = "Robot Speed:" + SimulationSettings.robotSpeed.ToString("F1");
     }
 
     public void StartSimulation()
@@ -59,6 +59,8 @@ public class MenuManager : MonoBehaviour
         gameManager.StartSimulation();
     }
 
+
+    //if all books are sorted
     public void ShowMenu()
     {
         menuPanel.SetActive(true);

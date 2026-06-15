@@ -1,13 +1,13 @@
 using System.Collections.Generic;
-using System.ComponentModel;
-using NUnit.Framework;
-using Unity.VisualScripting;
 using UnityEngine;
 
 public class RobotController : MonoBehaviour
 {
    public List<GridNode> currentPath = new List<GridNode>(); 
    public AStarPathfinder aStar;
+   public GameManager gameManager;
+   public  BarcodeDatabase database;
+    public  BSTVisualizer visualizer;
 
    private BaseState activeState;
    public float speed = 3f;
@@ -16,6 +16,7 @@ public class RobotController : MonoBehaviour
 
     public void Start()
     {
+        //start in resting state
         SwitchState(new IdleState(this));
     }
     public void SwitchState(BaseState newState)
@@ -39,8 +40,8 @@ public class RobotController : MonoBehaviour
     public void MoveToTarget(GridNode nextTarget)
     {
         
-        transform.position = Vector3.MoveTowards(transform.position, nextTarget.worldposition, speed * Time.deltaTime);
-        float distanceToTarget = Vector3.Distance(transform.position, nextTarget.worldposition);
+        transform.position = Vector3.MoveTowards(transform.position, nextTarget.worldPosition, speed * Time.deltaTime);
+        float distanceToTarget = Vector3.Distance(transform.position, nextTarget.worldPosition);
         if(distanceToTarget < 0.1f )
         {
           nextTargetIndex ++; 
@@ -65,7 +66,7 @@ public class RobotController : MonoBehaviour
             GridNode currentNode = queue.Dequeue();
 
       
-            Collider[] hits = Physics.OverlapSphere(currentNode.worldposition + Vector3.up * 1f, 1.5f);
+            Collider[] hits = Physics.OverlapSphere(currentNode.worldPosition + Vector3.up * 1f, 1.5f);
             foreach (Collider hit in hits)
             {
                 Book foundBook = hit.GetComponent<Book>();
@@ -90,6 +91,8 @@ public class RobotController : MonoBehaviour
         return null; 
     }
 
+
+    //AI helped here as I have never worked with colors or comparing nor calculating them before.
     public int ScanForCorrectSlot(Shelf targetShelf, Color bookColor)
     {
         int bestSlot = 0;

@@ -1870,7 +1870,6 @@ MonoBehaviour:
   speedSlider: {fileID: 1313149899}
   speedText: {fileID: 911598592}
   algorithmDropdown: {fileID: 823937327}
-  startButton: {fileID: 1911428510}
   gameManager: {fileID: 208714840}
   menuPanel: {fileID: 1995284865}
 --- !u!1 &199917912
@@ -2196,6 +2195,7 @@ MonoBehaviour:
   - {fileID: 4413063334248385406}
   - {fileID: 8636273590026614457}
   dropZone: {fileID: 1167945341}
+  robot: {fileID: 1611970446}
   bookThickness: 0.2
 --- !u!114 &208714841
 MonoBehaviour:
@@ -8074,7 +8074,19 @@ MonoBehaviour:
       m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_OnValueChanged:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 194639746}
+        m_TargetAssemblyTypeName: MenuManager, Assembly-CSharp
+        m_MethodName: UpdateSettings
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
   m_AlphaFadeSpeed: 0.15
 --- !u!114 &823937328
 MonoBehaviour:
@@ -8556,7 +8568,19 @@ MonoBehaviour:
   m_Value: 0
   m_OnValueChanged:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 194639746}
+        m_TargetAssemblyTypeName: MenuManager, Assembly-CSharp
+        m_MethodName: UpdateSettings
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!1 &911598590
 GameObject:
   m_ObjectHideFlags: 0
@@ -12456,7 +12480,19 @@ MonoBehaviour:
   m_Value: 1
   m_OnValueChanged:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 194639746}
+        m_TargetAssemblyTypeName: MenuManager, Assembly-CSharp
+        m_MethodName: UpdateSettings
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!1 &1317623005
 GameObject:
   m_ObjectHideFlags: 0
@@ -15091,6 +15127,8 @@ MonoBehaviour:
   hologramPrefab: {fileID: 5443101023643305738, guid: e711e2a1432e6594ca50065d886ead24, type: 3}
   flySpeed: 15
   waitTimeAtShelf: 0.05
+  spawnHeight: 2
+  shelfHoverHeight: 3
 --- !u!1 &1504390846
 GameObject:
   m_ObjectHideFlags: 0
@@ -16637,6 +16675,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::RobotController
   aStar: {fileID: 1008345621}
+  gameManager: {fileID: 208714840}
+  database: {fileID: 208714841}
+  visualizer: {fileID: 1489802924}
   speed: 12
   nextTargetIndex: 0
   currentTargetSlot: 0
@@ -20553,7 +20594,7 @@ Transform:
   m_GameObject: {fileID: 1906346272}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 12.5, y: 0, z: 7.5}
+  m_LocalPosition: {x: 12.5, y: -0.01, z: 7.5}
   m_LocalScale: {x: 25, y: 0.1, z: 15}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -20720,7 +20761,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1911428511}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 194639746}
+        m_TargetAssemblyTypeName: MenuManager, Assembly-CSharp
+        m_MethodName: StartSimulation
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &1911428511
 MonoBehaviour:
   m_ObjectHideFlags: 0

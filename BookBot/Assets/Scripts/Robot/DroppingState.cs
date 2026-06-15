@@ -6,9 +6,9 @@ public class DroppingState : BaseState
     private float waitTimer = 0f;
     private float timeToWait = 2f; 
     private bool hasDropped = false;
-public DroppingState(RobotController _robot)
+public DroppingState(RobotController robot)
     {
-        this.robot = _robot;
+        this.robot = robot;
     }
 
     public override void Enter()
@@ -23,7 +23,6 @@ public DroppingState(RobotController _robot)
 
       
         waitTimer += Time.deltaTime;
-
         
         if (waitTimer >= timeToWait)
         {
@@ -44,7 +43,7 @@ public DroppingState(RobotController _robot)
             
             
             heldBook.transform.SetParent(null);
-
+            //gives book to shelf (parenting removed)
             if (heldBook.myShelf != null)
             {
                
@@ -54,23 +53,24 @@ public DroppingState(RobotController _robot)
             Debug.Log($"Successfully inserted {heldBook.name} into slot {robot.currentTargetSlot}!");
         }
 
-        // Job done! Go back to sleep so the radar turns on to look for the next book.
+        //done let's start over
         robot.SwitchState(new IdleState(robot));
 
-        GameManager gm = GameObject.FindFirstObjectByType<GameManager>();
         
-        if (gm != null && gm.pileOfBooks.Count == 0)
+        
+        if (robot.gameManager != null && robot.gameManager.pileOfBooks.Count == 0)
         {
-            Debug.Log("[DROPPING STATE] That was the last book! Transitioning to FinishedState.");
+            Debug.Log("DROPPING STATE:  last book! going to FinishedState.");
             robot.SwitchState(new FinishedState(robot));
         }
         else
         {
-            Debug.Log("[DROPPING STATE] More books remain. Going back to Idle to scan for the next one.");
+            Debug.Log("More books. Going back to Idle to scan for the next one.");
             robot.SwitchState(new IdleState(robot));
         }
 
 
     }
-    public override void Exit() {}
+    public override void Exit() 
+    {}
 }

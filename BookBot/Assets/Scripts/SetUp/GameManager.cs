@@ -6,6 +6,7 @@ public class GameManager : MonoBehaviour
 
     public Shelf[] allShelves;
     public Transform dropZone;
+    public RobotController robot;
 
 
     public float bookThickness = 0.2f;
@@ -21,7 +22,7 @@ public class GameManager : MonoBehaviour
 
     private void BuildDatabase()
     {
-        BarcodeDatabase db = GetComponent<BarcodeDatabase>();
+        BarcodeDatabase database = GetComponent<BarcodeDatabase>();
         
         
         foreach (Shelf shelf in allShelves)
@@ -36,11 +37,11 @@ public class GameManager : MonoBehaviour
                 book.barcodeID = randomUPC;
                 
               
-                db.Insert(randomUPC, shelf, i);
+                database.Insert(randomUPC, shelf, i);
             }
         }
         
-        Debug.Log("Successfully built the Binary Search Tree Database!");
+        Debug.Log("Built Binary Search Tree Database!");
     }
     public void GenerateChaos()
     {
@@ -65,7 +66,7 @@ public class GameManager : MonoBehaviour
             int randomIndex = Random.Range(0, allAvailableBooks.Count);
             Book chosenBook = allAvailableBooks[randomIndex];
 
-         
+            //select books
             allAvailableBooks.RemoveAt(randomIndex);
             if (chosenBook == null)
             {
@@ -73,6 +74,8 @@ public class GameManager : MonoBehaviour
                 continue;
             }    
 
+
+            //remove book   
             Shelf parentShelf = chosenBook.myShelf;
             if (parentShelf != null)
             {
@@ -81,32 +84,26 @@ public class GameManager : MonoBehaviour
 
            
             chosenBook.transform.SetParent(null); 
-            
-          
-            BoxCollider col = chosenBook.GetComponent<BoxCollider>();
-            if (col == null) col = chosenBook.gameObject.AddComponent<BoxCollider>();
-           
-           
+                       
             Vector3 messyNudge = new Vector3(
                 Random.Range(-0.05f, 0.05f), 
-                (i * bookThickness)+0.6f, // Stack them upwards, starting 1 unit above the dropzone
+                (i * bookThickness)+0.6f, // books stacking
                 Random.Range(-0.05f, 0.05f)
             );
             
            
             chosenBook.transform.position = dropZone.position + messyNudge;
-            
+            //make it fancy
             float randomTwist = Random.Range(-20f, 20f);
             chosenBook.transform.rotation = Quaternion.Euler(0f, randomTwist, 90f);
             chosenBook.isSorted = false;
             pileOfBooks.Push(chosenBook);
         }
 
-        Debug.Log($"Chaos generated! Scattered {scatterCount} books into the pile.");
-        RobotController robot = GameObject.FindFirstObjectByType<RobotController>();
+        Debug.Log("books are now in pile");
         if (robot != null)
         {
-            Debug.Log("Boss: Wake up Robot, there is a new mess to clean!");
+            Debug.Log("pile of books is ready to be sorted");
             robot.SwitchState(new IdleState(robot));
         }
     }

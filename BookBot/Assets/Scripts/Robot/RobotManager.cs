@@ -1,6 +1,4 @@
 using System.Collections.Generic;
-using System.IO;
-using NUnit.Framework.Internal;
 using UnityEngine;
 
 public class RobotManager : MonoBehaviour
@@ -9,34 +7,34 @@ public class RobotManager : MonoBehaviour
     public AStarPathfinder pathfinder;
     public Shelf[] allShelves;
   
-    public Dictionary<Shelf, Vector3> deliveryZoneCache = new Dictionary<Shelf, Vector3>();
+    public Dictionary<Shelf, Vector3> shelfDeliveryZone = new Dictionary<Shelf, Vector3>();
 
 
     void Start()
     {
-
+        //Scan shelfs
         foreach (Shelf shelf in allShelves)
         {
             if (shelf != null)
             {
-                deliveryZoneCache.Add(shelf, shelf.GetDeliveryZone());
+                shelfDeliveryZone.Add(shelf, shelf.GetDeliveryZone());
             }
         }
-        Debug.Log($"Boss: Cached {deliveryZoneCache.Count} delivery zones in the Dictionary.");
+        Debug.Log("found location of deliveryzone ");
     }
 
     public void RequestPathToPile(Vector3 pilePosition)
     {
-        Debug.Log("Boss: BFS Scanner detected books! Calculating A* route to the pile...");
+        Debug.Log(" BFS Scanner saw books. calculating path");
         StartCoroutine(pathfinder.FindPath(robot.transform.position, pilePosition));
     }
 
     public void RequestPathToShelf(Shelf targetShelf)
     {
         
-        if (deliveryZoneCache.TryGetValue(targetShelf, out Vector3 zonePos))
+        if (shelfDeliveryZone.TryGetValue(targetShelf, out Vector3 zonePos))
         {
-            Debug.Log($"Boss: Calculating A* route to the {targetShelf.name}...");
+            Debug.Log(" calculating route to next shelf");
             StartCoroutine(pathfinder.FindPath(robot.transform.position, zonePos));
         }
     }
