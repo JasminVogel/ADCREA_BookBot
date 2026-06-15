@@ -35,7 +35,7 @@ public class PickingState : BaseState
 
             int scannedUPC = topBook.barcodeID;
             
-            // 2. Query the Boss's Database!
+          
             BarcodeDatabase db = GameObject.FindFirstObjectByType<BarcodeDatabase>();
             BinarySearchTreeNode databaseResult = db.Search(scannedUPC);
 
@@ -43,10 +43,27 @@ public class PickingState : BaseState
             {
                 Debug.Log($"BST Match! Barcode {scannedUPC} belongs to {databaseResult.targetShelf.name}, Slot {databaseResult.targetSlot}");
                 
-                // 3. Set the target and ask for the route
-                robot.currentTargetSlot = databaseResult.targetSlot;
-                robot.aStar.managerOfRobot.RequestPathToShelf(databaseResult.targetShelf);
-            }
+                BSTVisualizer visualizer = GameObject.FindFirstObjectByType<BSTVisualizer>();
+
+                if (visualizer != null && db.lastSearchPath.Count > 0)
+                {
+                    Debug.Log("Playing BST Hologram Animation!");
+                    
+                    visualizer.PlayHologramAnimation(robot.transform.position, db.lastSearchPath, () => 
+                    {
+                       
+                        robot.currentTargetSlot = databaseResult.targetSlot;
+                        robot.aStar.managerOfRobot.RequestPathToShelf(databaseResult.targetShelf);
+                    });
+                }
+                else
+                {
+                   
+                    Debug.LogWarning("[PICKING STATE] Visualizer skipped. Walking normally.");
+                    robot.currentTargetSlot = databaseResult.targetSlot;
+                    robot.aStar.managerOfRobot.RequestPathToShelf(databaseResult.targetShelf);
+                }
+            }   
             else
             {
                 robot.SwitchState(new FinishedState(robot));
@@ -56,7 +73,7 @@ public class PickingState : BaseState
 
     public override void Update()
     {
-        // We will add the color scanning logic here next!
+        
     }
 
     public override void Exit()

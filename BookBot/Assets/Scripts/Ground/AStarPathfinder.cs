@@ -10,14 +10,19 @@ public class AStarPathfinder : MonoBehaviour
 {
     [SerializeField] float waitingTime = 0.25f;
     public FloorGrid floorGrid;
+    public LineRenderer pathLine;
+    public RobotManager managerOfRobot;
+
+    public GameObject searchTilePrefab;
+    private List<GameObject> activeSearchTiles = new List<GameObject>();
+
    
     List<GridNode> openList = new List<GridNode>();
     List<GridNode> closedList = new List<GridNode>();
 
 
    
-    public RobotManager managerOfRobot;
-
+  
 
     public IEnumerator FindPath (Vector3 startPos, Vector3 targetPos)
     {
@@ -33,6 +38,19 @@ public class AStarPathfinder : MonoBehaviour
         //making sure nothing previous is in there
         openList.Clear();
         closedList.Clear();
+
+
+        //for visualisation
+        if (pathLine != null)
+        {
+            pathLine.positionCount = 0; 
+        }
+
+        ClearAllSearchTiles();
+        
+
+
+
 
         openList.Add(startNode);
 
@@ -51,11 +69,24 @@ public class AStarPathfinder : MonoBehaviour
 
             }
             closedList.Add(currentNode);
+
+            //for visualisation
+            if (searchTilePrefab != null)
+            {
+          
+            GameObject newTile = Instantiate(searchTilePrefab, currentNode.worldposition + (Vector3.up * 0.05f), Quaternion.Euler(90f, 0f, 0f));
+            activeSearchTiles.Add(newTile);
+            }
+
+
+
+
             floorGrid.checkedNodes = closedList;
             openList.Remove(currentNode);
 
             if(currentNode == targetNode)
             {   
+                ClearAllSearchTiles();
                 RetracePath(startNode, targetNode);
                 yield break;
             }
@@ -105,6 +136,15 @@ public class AStarPathfinder : MonoBehaviour
 
     }
 
+    private void ClearAllSearchTiles()
+    {
+      foreach (GameObject tile in activeSearchTiles)
+        {
+            Destroy(tile);
+        }
+        activeSearchTiles.Clear();  
+    }
+
 
     public int GetDistance(GridNode nodeA, GridNode nodeB)
     {
@@ -128,6 +168,16 @@ public class AStarPathfinder : MonoBehaviour
         }
         pathToStart.Reverse();
         floorGrid.finalPath = pathToStart;
+        // Visualisation for game window
+        if (pathLine != null)
+        {
+            pathLine.positionCount = pathToStart.Count;
+            for (int i = 0; i < pathToStart.Count; i++)
+            {
+                
+                pathLine.SetPosition(i, pathToStart[i].worldposition + (Vector3.up * 0.2f));
+            }
+        }
         managerOfRobot.BookMustBeDelivered(pathToStart);
 
     }

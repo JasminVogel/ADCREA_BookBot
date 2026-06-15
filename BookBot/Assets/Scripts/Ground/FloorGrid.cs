@@ -26,7 +26,7 @@ public class FloorGrid : MonoBehaviour
 
 
         Debug.Log("checking if node is on grid");
-        if(x >= 0 && x<gridSizeX && y>= 0 && y<gridSizeY)
+        if (gridNodes != null && x >= 0 && x < gridNodes.GetLength(0) && y >= 0 && y < gridNodes.GetLength(1))
         {
             return gridNodes[x,y];
         }
@@ -41,6 +41,12 @@ public class FloorGrid : MonoBehaviour
     {
         //new list for finding connected nodes (since not really a tree, this is how we do it, 3x3 field)
         List<GridNode> neighbor = new List<GridNode>();
+        if (gridNodes == null) 
+        { 
+            return neighbor;
+        }
+        int actualGridWidth = gridNodes.GetLength(0);
+        int actualGridHeight = gridNodes.GetLength(1);
 
         for(int x = -1; x <= 1; x ++)
         {
