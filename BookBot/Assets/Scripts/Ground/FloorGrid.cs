@@ -25,7 +25,7 @@ public class FloorGrid : MonoBehaviour
         int y = Mathf.RoundToInt(positionInWorld.z);  //IMPORTANT Y&Z switch
 
 
-        Debug.Log("checking if node is on grid");
+        
         if (gridNodes != null && x >= 0 && x < gridNodes.GetLength(0) && y >= 0 && y < gridNodes.GetLength(1))
         {
             return gridNodes[x,y];

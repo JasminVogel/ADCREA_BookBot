@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 2274640535478241318}
   - component: {fileID: 5916212268332295512}
   - component: {fileID: 8929134333359926461}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: WetFloorSign
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -176,7 +176,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8202119992787367526, guid: 56273c358bb29ed4ca8ae4d021e6a6e2, type: 3}
       propertyPath: m_Layer
-      value: 0
+      value: 6
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects:
